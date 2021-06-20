@@ -1,4 +1,4 @@
-const { createStore } = require("redux");
+const { createStore, applyMiddleware } = require("redux");
 const reducer = require("./reducer");
 
 const { createStore } = require("redux");
@@ -31,7 +31,16 @@ const nextState = {
   //       기존데이터            , 새로운 데이터
 };
 
-const store = createStore(Reducer, initialState);
+const firstMiddleware = (store) => (dispatch) => (action) => {
+  console.log("액션 로깅", action);
+  // 디스패하기 전 - 기능 추가
+  dispatch(action);
+  // 디스패치 후 - 기능추가
+  console.log("액션 끝");
+};
+const enhancer = applyMiddleware(firstMiddleware);
+//enhancer 추가
+const store = createStore(Reducer, initialState, enhancer);
 
 // action: type은 액션의 이름
 
