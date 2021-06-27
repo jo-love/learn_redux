@@ -38,7 +38,16 @@ const firstMiddleware = (store) => (dispatch) => (action) => {
   // 디스패치 후 - 기능추가
   console.log("액션 끝");
 };
-const enhancer = applyMiddleware(firstMiddleware);
+
+// 리덕스썽크
+const thunkMiddleware = (store) => (dispatch) => (action) => {
+  typeof action === "function"
+    ? // 비동기 코드
+      action(store.dispatch, store.getState)
+    : dispatch(action);
+};
+
+const enhancer = applyMiddleware(firstMiddleware, thunkMiddleware);
 //enhancer 추가
 const store = createStore(Reducer, initialState, enhancer);
 
